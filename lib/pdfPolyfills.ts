@@ -66,3 +66,5 @@ const g = globalThis as Record<string, unknown>;
 if (typeof g.DOMMatrix === "undefined") g.DOMMatrix = DOMMatrixPolyfill;
 if (typeof g.Path2D === "undefined") g.Path2D = Path2DPolyfill;
 if (typeof g.ImageData === "undefined") g.ImageData = ImageDataPolyfill;
+
+export {}; // 純副作用檔案，這行只是讓 TS 把它當成 module（可被 dynamic import()）
