@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { parseJsonSafely } from "@/lib/fetchJson";
 
 type Severity = "low" | "medium" | "high";
 
@@ -56,8 +57,8 @@ export function ContractUploader() {
   const loadHistory = useCallback(async () => {
     try {
       const res = await fetch("/api/reviews");
-      const json = await res.json();
-      if (res.ok) setHistory(json.reviews as HistoryItem[]);
+      const json = await parseJsonSafely<{ reviews: HistoryItem[] }>(res);
+      if (res.ok) setHistory(json.reviews);
     } catch {
       // 歷史紀錄載入失敗不影響主要功能，靜默忽略
     }
@@ -82,12 +83,12 @@ export function ContractUploader() {
       body.append("file", file);
 
       const res = await fetch("/api/review", { method: "POST", body });
-      const json = await res.json();
+      const json = await parseJsonSafely<ReviewResponse & { error?: string }>(res);
 
       if (!res.ok) {
         throw new Error(json.error || "審查失敗");
       }
-      setData(json as ReviewResponse);
+      setData(json);
       setFile(null);
       loadHistory();
     } catch (err) {

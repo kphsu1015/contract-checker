@@ -7,7 +7,11 @@ import { reviewContract, REVIEW_MODEL } from "@/lib/reviewContract";
 import { getCurrentUser } from "@/lib/auth";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+// gpt-5.5 是推理模型，一份實際合約實測就要接近 60 秒，maxDuration=60 太貼近臨界值，
+// 部署到 Vercel 時很容易被平台在回應寫完前砍斷連線，前端就會收到不完整的 body
+// 而爆出「Unexpected end of JSON input」。留多一點餘裕。
+// 注意：實際能生效的上限仍受 Vercel 方案限制（Hobby/Pro 上限不同）。
+export const maxDuration = 120;
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
