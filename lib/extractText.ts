@@ -1,3 +1,4 @@
+import "@/lib/pdfPolyfills"; // 必須排在 pdf-parse 之前，先把 DOMMatrix 等全域補上
 import { PDFParse } from "pdf-parse";
 import mammoth from "mammoth";
 
